@@ -10,16 +10,7 @@ int main(int argc, char **argv)
 
   s = new Surface(64);
 
-  s->connect();
-  printf("First print...\n");
-  s->print();
-
-  printf("Second print...\n");
-  s->print();
-
   display_window(s);
-
-  printf("Deleting...\n");
 
   delete s;
 

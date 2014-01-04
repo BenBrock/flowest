@@ -8,16 +8,22 @@ void display_window(Surface *surface){
   SDL_Init(SDL_INIT_VIDEO);
 
   const char *title = "flowest";
-  int width = 600;
-  int height = 400;
+  int width = 100;
+  int height = 100;
+  int zoom = 10;
+
+  int window_height = zoom * height;
+  int window_width = zoom * width;
 
   SDL_Window *window = SDL_CreateWindow(title,
     SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-    width, height, SDL_WINDOW_RESIZABLE);
+    window_width, window_height, SDL_WINDOW_RESIZABLE);
 
   Uint32 renderer_flags = SDL_RENDERER_ACCELERATED |
     SDL_RENDERER_PRESENTVSYNC;
   SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, renderer_flags);
+
+  SDL_RenderSetScale(renderer, zoom, zoom);
 
   SDL_Texture *texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,
     SDL_TEXTUREACCESS_STREAMING, width, height);
@@ -31,6 +37,8 @@ void display_window(Surface *surface){
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
+    surface->mutate();
+
     // Write to texture
     shadow(surface, texture);
 
@@ -38,6 +46,7 @@ void display_window(Surface *surface){
 
     SDL_RenderCopy(renderer, texture, NULL, NULL);
     SDL_RenderPresent(renderer);
+    SDL_Delay(1);
   }
 
   SDL_Quit();
