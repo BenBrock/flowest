@@ -1,4 +1,4 @@
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include "Surface.h"
 
 int main(int argc, char **argv)
@@ -20,12 +20,11 @@ int main(int argc, char **argv)
   SDL_Texture *texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,
     SDL_TEXTUREACCESS_STREAMING, width, height);
 
-  bool running = true;
-  while (running) {
+  while (1) {
     SDL_Event event;
     if (SDL_PollEvent(&event)) {
       if (event.type == SDL_QUIT)
-        running = false;
+        break;
     }
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
