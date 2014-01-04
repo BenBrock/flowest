@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cmath>
+#include <ctime>
 #include <algorithm>
 
 Surface::Surface(int n) : n(n)
@@ -59,9 +60,9 @@ void Surface::connect()
 bool Surface::permute(Voxel *v)
 {
   int cur_try;
-  vector <int> tries;
+  std::vector <int> tries;
 
-  while (tries < 6) {
+  while (tries.size() < 6) {
     cur_try = lrand48() % 6;
     if (find(tries.begin(), tries.end(), cur_try) == tries.end()) {
       tries.push_back(cur_try);
@@ -127,11 +128,20 @@ bool Surface::check()
   return true;
 }
 
+void Surface::test_shit()
+{
+  int i;
+
+  for (i = 0; i < 1000; i++) {
+    permute(voxels[lrand48() % n]);
+  }
+}
+
 bool Surface::exists(int x, int y, int z)
 {
   int i;
   for (i = 0; i < voxels.size(); i++) {
-    if (voxels[i]->position.x == x && voxels[i]->position.y = y && voxels[i]->position.z == z) {
+    if (voxels[i]->position.x == x && voxels[i]->position.y == y && voxels[i]->position.z == z) {
       return true;
     }
   }

@@ -18,8 +18,9 @@ class Surface {
     int d;
     std::vector <class Voxel *> voxels;
     void connect(); /* Set adj pointers. */
-    void permute();
+    bool permute(Voxel *v);
     bool check(); /* Check if surface is valid. */
+    void test_shit();
     bool exists(int x, int y, int z); /* Returns whether a voxel exists at x, y, z. */
     void print();
     Surface(int n);
