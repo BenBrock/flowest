@@ -15,6 +15,9 @@ Surface::Surface(int n) : n(n)
 
   d = round(pow(n, 1.0 / 3.0) / 2.0);
 
+  p = 0.2;
+  m = 32;
+
   this->n = (2 * d + 1) * (2 * d + 1) * (2 * d + 1);
 
   for (i = -d; i <= d; i++) {
@@ -57,8 +60,31 @@ void Surface::connect()
   }
 }
 
+void Surface::mutate()
+{
+  int i;
+  int to_permute;
+  bool p_succ;
+
+  to_permute = 0;
+
+  for (i = 0; i < m; i++) {
+    if (drand48() < p) to_permute++;
+  }
+
+  for (i = 0; i < to_permute; i++) {
+    p_succ = false;
+    do {
+      p_succ = permute(voxels[lrand48() % n]);
+    } while (!(p_succ));
+  }
+}
+
 bool Surface::permute(Voxel *v)
 {
+  /* Do not move the source block. */
+  if (v->position.x == 0 && v->position.y == 0 && v->position.z == 0) return false;
+
   int cur_try;
   std::vector <int> tries;
 
@@ -126,15 +152,6 @@ bool Surface::check()
     if (voxels[i]->adj.size() == 0) return false;
   }
   return true;
-}
-
-void Surface::test_shit()
-{
-  int i;
-
-  for (i = 0; i < 1000; i++) {
-    permute(voxels[lrand48() % n]);
-  }
 }
 
 bool Surface::exists(int x, int y, int z)

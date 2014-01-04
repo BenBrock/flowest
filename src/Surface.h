@@ -16,11 +16,14 @@ class Surface {
   public:
     int n; /* Number of blocks in surface. */
     int d;
+    double p; /* Probability of permutation. */
+    double m; /* Maximum possible permutations. */
+
     std::vector <class Voxel *> voxels;
     void connect(); /* Set adj pointers. */
+    void mutate(); /* Mutate surface in accordance with p and m. */
     bool permute(Voxel *v);
     bool check(); /* Check if surface is valid. */
-    void test_shit();
     bool exists(int x, int y, int z); /* Returns whether a voxel exists at x, y, z. */
     void print();
     Surface(int n);
