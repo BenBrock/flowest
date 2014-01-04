@@ -2,12 +2,15 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cmath>
+#include <algorithm>
 
 Surface::Surface(int n) : n(n)
 {
   int i, j, k;
   int x, y, z;
   Voxel *v;
+
+  srand48(time(0));
 
   d = round(pow(n, 1.0 / 3.0) / 2.0);
 
@@ -51,6 +54,88 @@ void Surface::connect()
       }
     }
   }
+}
+
+bool Surface::permute(Voxel *v)
+{
+  int cur_try;
+  vector <int> tries;
+
+  while (tries < 6) {
+    cur_try = lrand48() % 6;
+    if (find(tries.begin(), tries.end(), cur_try) == tries.end()) {
+      tries.push_back(cur_try);
+      switch (cur_try)
+      {
+        case UP:
+          if (exists(v->position.x, v->position.y, v->position.z + 1)) continue;
+          v->position.z = v->position.z + 1;
+          if (check()) {
+            return true;
+          }
+          break;
+        case DOWN:
+          if (exists(v->position.x, v->position.y, v->position.z - 1)) continue;
+          v->position.z = v->position.z - 1;
+          if (check()) {
+            return true;
+          }
+          break;
+        case X_POS:
+          if (exists(v->position.x + 1, v->position.y, v->position.z)) continue;
+          v->position.z = v->position.x + 1;
+          if (check()) {
+            return true;
+          }
+          break;
+        case X_NEG:
+          if (exists(v->position.x - 1, v->position.y, v->position.z)) continue;
+          v->position.z = v->position.x - 1;
+          if (check()) {
+            return true;
+          }
+          break;
+        case Y_POS:
+          if (exists(v->position.x, v->position.y + 1, v->position.z)) continue;
+          v->position.z = v->position.y + 1;
+          if (check()) {
+            return true;
+          }
+          break;
+        case Y_NEG:
+          if (exists(v->position.x, v->position.y - 1, v->position.z)) continue;
+          v->position.z = v->position.y - 1;
+          if (check()) {
+            return true;
+          }
+          break;
+      }
+    }
+  }
+  return false;
+}
+
+bool Surface::check()
+{
+  int i;
+
+  connect();
+
+  for (i = 0; i < voxels.size(); i++) {
+    if (voxels[i]->adj.size() == 0) return false;
+  }
+  return true;
+}
+
+bool Surface::exists(int x, int y, int z)
+{
+  int i;
+  for (i = 0; i < voxels.size(); i++) {
+    if (voxels[i]->position.x == x && voxels[i]->position.y = y && voxels[i]->position.z == z) {
+      return true;
+    }
+  }
+  return false;
 }
 
 void Surface::print()
