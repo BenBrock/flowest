@@ -5,6 +5,21 @@
 #include <ctime>
 #include <algorithm>
 
+Population::Population(int s, int n) : s(s)
+{
+  int i;
+  Surface *s;
+
+  pv = 0.25;
+
+  v = n * pv
+
+  for (i = 0; i < s; i++) {
+    s = new Surface(n);
+    surfaces.push_back(s);
+  }
+}
+
 Surface::Surface(int n) : n(n)
 {
   int i, j, k;
@@ -37,6 +52,36 @@ Voxel::Voxel(int x, int y, int z)
   position.x = x;
   position.y = y;
   position.z = z;
+}
+
+void Population::evolve()
+{
+  int drag;
+  std::list <Surface *>::iterator lit;
+  std::list <Surface *>::iterator lit2;
+  std::map <drag, Surface *> victors;
+
+  for (lit = surfaces.begin(); lit != surfaces.end(); lit++) {
+    (*lit)->drag = computeAverageDrag(*lit);
+
+    if (victors.size() < v) {
+      victors.insert(make_pair((*lit)->drag, *lit));
+    } else {
+      if (victors.rbegin()->first > (*lit)->drag) {
+        victors.erase(victors.rbegin());
+        victors.insert(make_pair((*lit)->drag, *lit));
+      }
+    }
+  }
+
+  for (lit = surfaces.begin(); lit != surfaces.end(); lit++) {
+    if (victors.find((*lit)->drag) == victors.end()) {
+      lit2 = lit;
+      if (lit != lit.begin()) lit--;
+      delete *lit2;
+      surfaces.erase(lit2);
+    }
+  }
 }
 
 void Surface::connect()
@@ -184,10 +229,25 @@ void Surface::print()
   }
 }
 
+Population::~Population()
+{
+  std::list <Surface *>::iterator lit;
+
+  for (lit = surfaces.begin(); lit != surfaces.end(); lit++) {
+    delete *lit;
+  }
+}
+
 Surface::~Surface()
 {
   int i;
   for (i = 0; i < voxels.size(); i++) {
     delete voxels[i];
   }
+}
+
+/* Dummy function. To be replaced by Palibos. */
+float computeAverageDrag(Surface *surface)
+{
+  return drand48() * lrand48();
 }

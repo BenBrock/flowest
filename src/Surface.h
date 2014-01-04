@@ -12,12 +12,25 @@ typedef enum {
   D_LEN
   } Directions;
 
+class Population {
+  public:
+    int s; /* Size of population. */
+    int v; /* Number of victors in each population. */
+    double pv; /* Percentage of victors in each population. */
+    std::list <class Surface *> surfaces;
+
+    void evolve();
+
+    Population();
+};
+
 class Surface {
   public:
     int n; /* Number of blocks in surface. */
     int d;
     double p; /* Probability of permutation. */
     double m; /* Maximum possible permutations. */
+    double drag;
     std::vector <class Voxel *> voxels;
 
     void mutate(); /* Mutate surface in accordance with p and m. */
@@ -39,3 +52,5 @@ class Voxel {
 
     Voxel(int x, int y, int z);
 };
+
+float computeAverageDrag(Surface *surface);
