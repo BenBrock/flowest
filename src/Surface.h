@@ -18,14 +18,17 @@ class Surface {
     int d;
     double p; /* Probability of permutation. */
     double m; /* Maximum possible permutations. */
-
     std::vector <class Voxel *> voxels;
+
     void connect(); /* Set adj pointers. */
     void mutate(); /* Mutate surface in accordance with p and m. */
-    bool permute(Voxel *v);
+
+    bool permute(Voxel *v); /* Attempt to permute Voxel to which v points. */
     bool check(); /* Check if surface is valid. */
     bool exists(int x, int y, int z); /* Returns whether a voxel exists at x, y, z. */
+
     void print();
+
     Surface(int n);
     ~Surface();
 };
@@ -34,5 +37,6 @@ class Voxel {
   public:
     Vec3i position;
     std::list <Voxel *> adj;
+
     Voxel(int x, int y, int z);
 };

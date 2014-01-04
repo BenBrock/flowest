@@ -80,6 +80,7 @@ void Surface::mutate()
   }
 }
 
+/* Attempt to permute Voxel to which v points. */
 bool Surface::permute(Voxel *v)
 {
   /* Do not move the source block. */
@@ -142,6 +143,7 @@ bool Surface::permute(Voxel *v)
   return false;
 }
 
+/* Check if Surface is valid. */
 bool Surface::check()
 {
   int i;
@@ -154,6 +156,7 @@ bool Surface::check()
   return true;
 }
 
+/* Check if a voxel exists at x, y, z. */
 bool Surface::exists(int x, int y, int z)
 {
   int i;
