@@ -5,7 +5,9 @@ LDFLAGS = \
 	-lSDL2
 
 SRCS = \
-	src/Render.cpp
+	src/main_bechtel.cpp \
+	src/Render.cpp \
+	src/Surface.cpp
 
 flowest: $(SRCS)
 	$(LINK.cpp) -o $@ $^

@@ -1,11 +1,13 @@
 #include <SDL2/SDL.h>
 #include "Surface.h"
+#include "Render.h"
 
-int main(int argc, char **argv)
-{
+void shadow(Surface *surface, SDL_Texture *texture);
+
+void display_window(Surface *surface){
   SDL_Init(SDL_INIT_VIDEO);
 
-  const char *title = "flowist";
+  const char *title = "flowest";
   int width = 600;
   int height = 400;
 
@@ -30,16 +32,7 @@ int main(int argc, char **argv)
     SDL_RenderClear(renderer);
 
     // Write to texture
-    Uint32 *pixels;
-    int pitch;
-
-    int err = SDL_LockTexture(texture, NULL, (void **) &pixels, &pitch);
-
-    for (int i = 0; i < width * height; i++) {
-      pixels[i] = 0x0;
-    }
-
-    SDL_UnlockTexture(texture);
+    shadow(surface, texture);
 
     // Done writing to texture
 
@@ -48,5 +41,34 @@ int main(int argc, char **argv)
   }
 
   SDL_Quit();
-  return 0;
+}
+
+
+
+void shadow(Surface *surface, SDL_Texture *texture){
+    Uint32 *pixels;
+    int pitch;
+    int width;
+    int height;
+
+    SDL_QueryTexture(texture, NULL,NULL,
+                      &width, &height);
+
+    int err = SDL_LockTexture(texture, NULL, (void **) &pixels, &pitch);
+
+    for (int i = 0; i < width * height; i++){
+      pixels[i] = 0x000000FF;
+    }
+
+    for (int i = 0; i < surface->voxels.size(); i++){
+      int scr_x = surface->voxels[i]->position.x; //Screen x
+      int scr_y = surface->voxels[i]->position.z; //Screen y
+
+      scr_x = scr_x + width/2;
+      scr_y = scr_y + height/2;
+
+      pixels[scr_x + width * scr_y] = 0xFFFFFFFF;
+    }
+
+    SDL_UnlockTexture(texture);
 }
