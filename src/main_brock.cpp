@@ -10,16 +10,9 @@ int main(int argc, char **argv)
   s = new Surface(64);
 
   s->connect();
-  printf("First print...\n");
   s->print();
 
-  printf("testing...\n");
-  s->test_shit();
-
-  printf("Second print...\n");
-  s->print();
-
-  printf("Deleting...\n");
+  printf("%f\n", computeAverageDrag(s));
 
   delete s;
 

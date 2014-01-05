@@ -77,9 +77,15 @@ void Population::evolve()
   for (lit = surfaces.begin(); lit != surfaces.end(); lit++) {
     if (victors.find((*lit)->drag) == victors.end()) {
       lit2 = lit;
-      if (lit != lit.begin()) lit--;
-      delete *lit2;
-      surfaces.erase(lit2);
+      if (lit != lit.begin()) {
+        delete *lit2;
+        surfaces.erase(lit2);
+        lit--;
+      } else {
+        delete *lit2;
+        surfaces.erase(lit2);
+        lit = surfaces.begin();
+      }
     }
   }
 }
