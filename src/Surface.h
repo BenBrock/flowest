@@ -10,7 +10,7 @@ typedef enum {
   Y_POS,
   Y_NEG,
   D_LEN
-  } Directions;
+} Directions;
 
 class Population {
   public:
