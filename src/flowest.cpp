@@ -58,6 +58,59 @@ private:
 	SDL_Texture *texture;
 };
 
+/*
+class SliceElement : public Element {
+public:
+	SliceElement() {
+		texture = NULL;
+	}
+	
+	void draw(SDL_Renderer *renderer) {
+		if (!texture) {
+			SDL_Quit();
+ 		}
+
+		int width = 256;
+		int height = 256;
+		texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,
+						SDL_TEXTUREACCESS_STREAMING, width, height);
+		
+		Pixel *pixels;
+		int pitch;
+		SDL_LockTexture(texture, NULL, (void **) &pixels, &pitch);
+		
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				pixels[x + width * y].setRGBA(x, y, 0);
+			}
+		}
+		SDL_QueryTexture(texture, NULL,NULL,
+                  &width, &height);
+
+ 		int err = SDL_LockTexture(texture, NULL, (void **) &pixels, &pitch);
+
+		for (int i = 0; i < width * height; i++){
+  			pixels[i] = 0x000000FF;
+ 		}
+
+		for (int i = 0; i < surface->voxels.size(); i++){
+  			int scr_x = surface->voxels[i]->position.x; //Screen x
+  			int scr_y = surface->voxels[i]->position.z; //Screen y
+
+      		scr_x = scr_x + width/2;
+      		scr_y = scr_y + height/2;
+      		pixels[scr_x + width * scr_y] = 0xFFFFFFFF;
+		}
+
+		SDL_RenderCopy(renderer, texture, NULL, NULL);
+		SDL_UnlockTexture(texture);
+	}
+private:
+	SDL_Texture *texture;
+};
+*/
+
+
 
 /*
 void drawShadow(Display &display, Surface *surface) {
