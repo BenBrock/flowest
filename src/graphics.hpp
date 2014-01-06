@@ -1,39 +1,51 @@
 #ifndef GRAPHICS_HPP
 #define GRAPHICS_HPP
 
-#include <mutex>
+#include <list>
 #include <SDL2/SDL.h>
 
 
-class Display {
+struct Pixel {
+	// This order assumes little endian
+	Uint8 a, b, g, r;
+	
+	inline void setRGBA(Uint8 r=0, Uint8 g=0, Uint8 b=0, Uint8 a=255) {
+		this->r = r; this->g = g; this->b = b; this->a = a;
+	}
+};
+
+
+class Element {
+public:
+	virtual void draw(SDL_Renderer *renderer) {}
+};
+
+
+class Container : public Element {
+public:
+	void draw(SDL_Renderer *renderer);
+	void add(Element *element);
+	// void remove(Element *element);
+	
+private:
+	std::list<Element *> elements;
+};
+
+
+class Display : public Container {
 public:
 	Display(int width, int height, int zoom=1);
 	void start();
-	
-	/** Generates a surface with proper size and pixel format
-		to be drawn onto by a pixel source (such as a physics engine)
-	*/
-	SDL_Surface *createNextSurface();
-	
-	/** Gives back the surface created by createNextSurface() to be
-		drawn to the screen in the next frame
-	*/
-	void setNextSurface(SDL_Surface *surface);
-	
-	bool running;
+	void close();
 	
 private:
 	void checkEvent(SDL_Event &event);
 	void render();
 	
 private:
-	int width;
-	int height;
+	bool running;
 	SDL_Window *window;
 	SDL_Renderer *renderer;
-	SDL_Texture *screenTexture;
-	SDL_Surface *nextSurface;
-	std::recursive_mutex surfaceMutex;
 };
 
 #endif

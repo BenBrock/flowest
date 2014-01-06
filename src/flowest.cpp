@@ -23,25 +23,41 @@ void check(bool success, const char *errFormat, ...) {
 	va_end(vl);
 }
 
-/** Serves as boilerplate code for creating draw*() functions
+/** Serves as boilerplate code for creating Element subclasses
 */
-void drawColorWheel(Display *display) {
-	for (int b = 0; display->running; b = (b + 1) % 256) {
-		SDL_Surface *dest = display->createNextSurface();
-		SDL_LockSurface(dest);
-		
-		Uint32 *pixels = (Uint32 *) dest->pixels;
-		for (int y = 0; y < dest->h; y++) {
-			for (int x = 0; x < dest->w; x++) {
-				pixels[x + dest->w * y] = SDL_MapRGB(dest->format, 255-x, x, b);
+class ColorWheelElement : public Element {
+public:
+	ColorWheelElement() {
+		texture = NULL;
+	}
+	
+	void draw(SDL_Renderer *renderer) {
+		if (!texture) {
+			int width = 256;
+			int height = 256;
+			texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,
+				SDL_TEXTUREACCESS_STREAMING, width, height);
+			
+			Pixel *pixels;
+			int pitch;
+			SDL_LockTexture(texture, NULL, (void **) &pixels, &pitch);
+			
+			for (int y = 0; y < height; y++) {
+				for (int x = 0; x < width; x++) {
+					pixels[x + width * y].setRGBA(x, y, 0);
+				}
 			}
+			
+			SDL_UnlockTexture(texture);
 		}
 		
-		SDL_UnlockSurface(dest);
-		display->setNextSurface(dest);
-		SDL_Delay(10);
+		SDL_RenderCopy(renderer, texture, NULL, NULL);
 	}
-}
+	
+private:
+	SDL_Texture *texture;
+};
+
 
 /*
 void drawShadow(Display &display, Surface *surface) {
@@ -75,13 +91,11 @@ int main(int argc, const char **argv) {
 	
 	// Create display
 	Display display(256, 256, 2);
-	std::thread drawThread(drawColorWheel, &display);
+	display.add(new ColorWheelElement());
 	display.start();
-	drawThread.join();
 	
 	// Cleanup
 	SDL_Quit();
 	
-	// It's pretty unlikely that this will return 1
-	return !rand();
+	return sin(3.14159265359);
 }
