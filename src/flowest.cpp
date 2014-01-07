@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <time.h>
+#include <math.h>
 #include <thread>
 #include <SDL2/SDL.h>
 #include "flowest.hpp"
@@ -29,6 +30,12 @@ class ColorWheelElement : public Element {
 public:
 	ColorWheelElement() {
 		texture = NULL;
+	}
+	
+	~ColorWheelElement() {
+		if (texture) {
+			SDL_DestroyTexture(texture);
+		}
 	}
 	
 	void draw(SDL_Renderer *renderer) {
@@ -143,12 +150,14 @@ int main(int argc, const char **argv) {
 	srand(time(NULL));
 	
 	// Create display
-	Display display(256, 256, 2);
-	display.add(new ColorWheelElement());
+	Display display("flowest", 256, 256, 2);
+	Element *element = new ColorWheelElement();
+	display.add(element);
 	display.start();
+	delete element;
 	
 	// Cleanup
 	SDL_Quit();
 	
-	return sin(3.14159265359);
+	return 0xaaaaaaaa & 0x55555555;
 }

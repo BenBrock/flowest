@@ -6,8 +6,8 @@
 
 void Container::draw(SDL_Renderer *renderer) {
 	// Draw the elements backwards
-	for (auto i = elements.rbegin(); i != elements.rend(); i++) {
-		(*i)->draw(renderer);
+	for (Element *element : elements) {
+		element->draw(renderer);
 	}
 }
 
@@ -18,11 +18,10 @@ void Container::add(Element *element) {
 
 // class Display
 
-Display::Display(int width, int height, int zoom) {
+Display::Display(const char *title, int width, int height, int zoom) {
 	running = false;
 	
 	// Window
-	const char *title = "flowest";
 	int windowWidth = width * zoom;
 	int windowHeight = height * zoom;
 	window = SDL_CreateWindow(title,
@@ -35,6 +34,11 @@ Display::Display(int width, int height, int zoom) {
 	SDL_RenderSetScale(renderer, zoom, zoom);
 }
 
+Display::~Display() {
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
+}
+
 void Display::start() {
 	running = true;
 	while (running) {
@@ -45,10 +49,6 @@ void Display::start() {
 		
 		render();
 	}
-}
-
-void Display::close() {
-	running = false;
 }
 
 void Display::checkEvent(SDL_Event &event) {

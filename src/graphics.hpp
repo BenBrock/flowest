@@ -34,9 +34,9 @@ private:
 
 class Display : public Container {
 public:
-	Display(int width, int height, int zoom=1);
+	Display(const char *title, int width, int height, int zoom=1);
+	~Display();
 	void start();
-	void close();
 	
 private:
 	void checkEvent(SDL_Event &event);
