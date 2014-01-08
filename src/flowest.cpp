@@ -38,58 +38,40 @@ public:
 	
 	bool isDirty() {
 		return true;
+		//Lulz -LAB
 	}
 };
 
 /*
-class SliceElement : public Element {
+class SliceElement : public TextureElement {
 public:
-	SliceElement() {
-		texture = NULL;
+	Surface s; //Surface
+	std::string f_d; //Fixed Dimension
+	int loc; //Slice location in fixed dimension
+
+	SliceElement(Surface *surface, std::string fixed_dim, int location) {
+		s = surface;
+		f_d = fixed_dim; *
+		loc = location;
 	}
 	
-	void draw(SDL_Renderer *renderer) {
-		if (!texture) {
-			SDL_Quit();
- 		}
-
-		int width = 256;
-		int height = 256;
-		texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,
-						SDL_TEXTUREACCESS_STREAMING, width, height);
-		
-		Pixel *pixels;
-		int pitch;
-		SDL_LockTexture(texture, NULL, (void **) &pixels, &pitch);
-		
+	void paint(int width, int height, Pixel *pixels){
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
+
 				pixels[x + width * y].setRGBA(x, y, 0);
 			}
 		}
-		SDL_QueryTexture(texture, NULL,NULL,
-                  &width, &height);
 
- 		int err = SDL_LockTexture(texture, NULL, (void **) &pixels, &pitch);
-
-		for (int i = 0; i < width * height; i++){
-  			pixels[i] = 0x000000FF;
- 		}
-
-		for (int i = 0; i < surface->voxels.size(); i++){
-  			int scr_x = surface->voxels[i]->position.x; //Screen x
-  			int scr_y = surface->voxels[i]->position.z; //Screen y
-
-      		scr_x = scr_x + width/2;
-      		scr_y = scr_y + height/2;
-      		pixels[scr_x + width * scr_y] = 0xFFFFFFFF;
+		//TODO: make sure the x_pos and y_pos are within 
+		//the given width and height?
+		for (Voxel *voxel : surface->voxels){
+			x_pos = voxel.position.x
+			y_pos = voxel.position.y
+			pixels[x_pos + width * y_pos].setRGBA(10, 10, 10)
 		}
 
-		SDL_RenderCopy(renderer, texture, NULL, NULL);
-		SDL_UnlockTexture(texture);
 	}
-private:
-	SDL_Texture *texture;
 };
 */
 
