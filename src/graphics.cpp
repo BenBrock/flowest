@@ -68,3 +68,43 @@ void Display::render() {
 	
 	SDL_RenderPresent(renderer);
 }
+
+
+TextureElement::TextureElement() {
+	texture = NULL;
+}
+
+TextureElement::~TextureElement() {
+	if (texture) {
+		SDL_DestroyTexture(texture);
+	}
+}
+
+void TextureElement::draw(SDL_Renderer *renderer) {
+	// Lazily create the texture
+	if (!texture) {
+		// TODO
+		// Generalize the width and height
+		int width = 256;
+		int height = 256;
+		texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,
+			SDL_TEXTUREACCESS_STREAMING, width, height);
+	}
+	
+	// Paint the texture
+	if (isDirty()) {
+		int width, height;
+		int pitch;
+		Pixel *pixels;
+		
+		SDL_QueryTexture(texture, NULL, NULL, &width, &height);
+		SDL_LockTexture(texture, NULL, (void **) &pixels, &pitch);
+		check(width * sizeof(Pixel) == pitch, "Texture has unexpected pitch");
+		
+		paint(width, height, pixels);
+		
+		SDL_UnlockTexture(texture);
+	}
+	
+	SDL_RenderCopy(renderer, texture, NULL, NULL);
+}

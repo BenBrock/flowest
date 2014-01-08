@@ -7,7 +7,7 @@
 #include <SDL2/SDL.h>
 #include "flowest.hpp"
 #include "graphics.hpp"
-#include "Surface.h"
+#include "physics.hpp"
 
 
 void check(bool success, const char *errFormat, ...) {
@@ -26,43 +26,19 @@ void check(bool success, const char *errFormat, ...) {
 
 /** Serves as boilerplate code for creating Element subclasses
 */
-class ColorWheelElement : public Element {
+class ColorWheelElement : public TextureElement {
 public:
-	ColorWheelElement() {
-		texture = NULL;
-	}
-	
-	~ColorWheelElement() {
-		if (texture) {
-			SDL_DestroyTexture(texture);
-		}
-	}
-	
-	void draw(SDL_Renderer *renderer) {
-		if (!texture) {
-			int width = 256;
-			int height = 256;
-			texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888,
-				SDL_TEXTUREACCESS_STREAMING, width, height);
-			
-			Pixel *pixels;
-			int pitch;
-			SDL_LockTexture(texture, NULL, (void **) &pixels, &pitch);
-			
-			for (int y = 0; y < height; y++) {
-				for (int x = 0; x < width; x++) {
-					pixels[x + width * y].setRGBA(x, y, 0);
-				}
+	void paint(int width, int height, Pixel *pixels) {
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				pixels[x + width * y].setRGBA(x, y, 256 - (x + y) / 2);
 			}
-			
-			SDL_UnlockTexture(texture);
 		}
-		
-		SDL_RenderCopy(renderer, texture, NULL, NULL);
 	}
 	
-private:
-	SDL_Texture *texture;
+	bool isDirty() {
+		return true;
+	}
 };
 
 /*
@@ -151,10 +127,15 @@ int main(int argc, const char **argv) {
 	
 	// Create display
 	Display display("flowest", 256, 256, 2);
-	Element *element = new ColorWheelElement();
-	display.add(element);
+	
+	WindTunnelElement *windTunnelElement = new WindTunnelElement();
+	std::thread windTunnelThread(&WindTunnelElement::start, windTunnelElement);
+	
+	display.add(windTunnelElement);
 	display.start();
-	delete element;
+	
+	// windTunnelThread.join();
+	delete windTunnelElement;
 	
 	// Cleanup
 	SDL_Quit();

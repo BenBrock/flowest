@@ -48,4 +48,18 @@ private:
 	SDL_Renderer *renderer;
 };
 
+
+class TextureElement : public Element {
+public:
+	TextureElement();
+	~TextureElement();
+	void draw(SDL_Renderer *renderer);
+	
+	virtual void paint(int width, int height, Pixel *pixels) {}
+	virtual bool isDirty() { return true; }
+	
+private:
+	SDL_Texture *texture;
+};
+
 #endif
