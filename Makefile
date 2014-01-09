@@ -1,22 +1,17 @@
-CPPFLAGS = -g -O0 -std=c++11 \
-	-Iolb/src \
-	-Iolb/src/external \
-	-Iolb/src/external/cvmlcpp \
-	-Iolb/src/external/boost
+CPPFLAGS = -g -O3 -std=c++11 \
+	-Iolb/src
 
 LDFLAGS = \
 	-lSDL2
 
-ARCHIVES = \
-	olb/build/generic/lib/libolb.a
-
 SRCS = \
 	src/flowest.cpp \
+	src/maths.cpp \
 	src/graphics.cpp \
 	src/physics.cpp
 
 flowest: $(SRCS)
-	$(LINK.cpp) -o $@ $^ $(ARCHIVES)
+	$(LINK.cpp) -o $@ $^
 
 clean:
 	rm -f flowest
