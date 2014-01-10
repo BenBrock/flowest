@@ -95,6 +95,7 @@ struct FieldF : public Field<float> {
 	using Field<float>::Field;
 	
 	void print();
+	float laplacian(int x, int y);
 };
 
 
