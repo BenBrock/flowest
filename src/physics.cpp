@@ -9,6 +9,7 @@
 WindTunnel::WindTunnel() {
 	field = new FieldF(w, h);
 	t = 0.0;
+	running = false;
 }
 
 WindTunnel::~WindTunnel() {
@@ -20,10 +21,14 @@ void WindTunnel::start() {
 	field->clear();
 	
 	// Timestepping
-	for (;; t += DELTA_T) {
+	for (running = true; running; t += DELTA_T) {
 		step();
-		usleep(100000);
+		usleep(10000);
 	}
+}
+
+void WindTunnel::stop() {
+	running = false;
 }
 
 void WindTunnel::step() {
@@ -33,7 +38,7 @@ void WindTunnel::step() {
 	
 	for (int y = 0; y < h; y++) {
 		for (int x = 0; x < w; x++) {
-			newField->at(x, y) = field->at(x, y) + 10.0;
+			newField->at(x, y) = field->at(x, y) + (float) rand() / RAND_MAX;
 		}
 	}
 	
@@ -48,6 +53,10 @@ WindTunnelElement::WindTunnelElement() {
 
 void WindTunnelElement::start() {
 	windTunnel->start();
+}
+
+void WindTunnelElement::stop() {
+	windTunnel->stop();
 }
 
 void WindTunnelElement::paint(int width, int height, Pixel *pixels) {

@@ -116,7 +116,8 @@ int main(int argc, const char **argv) {
 	display.add(windTunnelElement);
 	display.start();
 	
-	// windTunnelThread.join();
+	windTunnelElement->stop();
+	windTunnelThread.join();
 	delete windTunnelElement;
 	
 	// Cleanup

@@ -14,6 +14,7 @@ public:
 	WindTunnel();
 	~WindTunnel();
 	void start();
+	void stop();
 	void step();
 	
 	static const int w = 256;
@@ -24,6 +25,7 @@ public:
 	FieldF *field;
 private:
 	float t;
+	bool running;
 };
 
 
@@ -31,6 +33,7 @@ class WindTunnelElement : public TextureElement {
 public:
 	WindTunnelElement();
 	void start();
+	void stop();
 	
 	void paint(int width, int height, Pixel *pixels);
 	

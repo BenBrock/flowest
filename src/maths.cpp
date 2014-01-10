@@ -19,6 +19,6 @@ void FieldF::print() {
 }
 
 float FieldF::laplacian(int x, int y) {
-	return (safeAt(x - 1, y) - 2 * safeAt(x, y) + safeAt(x + 1, y)) / (DELTA_X * DELTA_X) +
-		(safeAt(x, y - 1) - 2 * safeAt(x, y) + safeAt(x, y + 1)) / (DELTA_Y * DELTA_Y);
+	return (atSafe(x - 1, y) - 2 * atSafe(x, y) + atSafe(x + 1, y)) / (DELTA_X * DELTA_X) +
+		(atSafe(x, y - 1) - 2 * atSafe(x, y) + atSafe(x, y + 1)) / (DELTA_Y * DELTA_Y);
 }
