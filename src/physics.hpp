@@ -22,7 +22,7 @@ public:
 	
 	std::recursive_mutex stepMutex;
 	
-	FieldF *field;
+	FieldF *U;
 private:
 	float t;
 	bool running;

@@ -4,10 +4,27 @@
 #include <math.h>
 
 
-// No sense in encapsulating this stuff right now
+/* General maths */
+
+inline int euclideanMod(int n, int d) {
+	return (n %= d) >= 0 ? n : n + d;
+}
+
+inline float clip(float low, float high, float value) {
+	if (value < low) {
+		value = low;
+	}
+	else if (value > high) {
+		value = high;
+	}
+	
+	return value;
+}
 
 
 /* Vectors */
+
+// No sense in encapsulating this stuff right now
 
 struct Vec2f {
 	float x, y;
@@ -64,16 +81,7 @@ struct Field {
 	}
 	
 	inline float &atSafe(int x, int y) {
-		// x86 sucks
-		// Fix non-Euclidean integer division
-		if (x < 0) {
-			x += w;
-		}
-		if (y < 0) {
-			y += h;
-		}
-		
-		return at(x % w, y % h);
+		return at(euclideanMod(x, w), euclideanMod(y, h));
 	}
 	
 	inline void clear(T value=T()) {
